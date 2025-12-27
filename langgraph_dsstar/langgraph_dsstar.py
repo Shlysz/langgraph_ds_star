@@ -293,6 +293,9 @@ class LangGraphDSStar:
         exec_result, error = self._execute_code(code, data_files)
         attempts = 0
         while error and self.config.auto_debug and attempts < self.config.debug_attempts:
+            # 如果是不可恢复错误直接终止程序
+            if "Missing data files" in error:
+                break
             code = self._debug_code(code, error, data_desc, data_files)
             exec_result, error = self._execute_code(code, data_files)
             attempts += 1
